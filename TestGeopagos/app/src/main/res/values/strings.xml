@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TestGeopagos</string>
+    <string name="input_amount_title">Ingrese Monto</string>
+    <string name="amount_label">Monto</string>
+    <string name="continue_label">Continuar</string>
+    <string name="money_prefix">$ %1$s</string>
+    <string name="select_payment_methods">Seleccione un método de pago</string>
+    <string name="select_bank_title">Seleccione su Banco emisor</string>
+    <string name="pick_installment">Seleccione cuotas</string>
+    <string name="payment_confirmed">Su pago ha sido confirmado</string>
+    <string name="finish">Finalizar</string>
+    <string name="installments_title">Seleccione cantidad de cuotas</string>
+    <string name="confirmed_amount">Monto: $ %1$s</string>
+    <string name="confirmed_bank">Banco: %1$s</string>
+    <string name="confimerd_payment">Método de Pago: %1$s</string>
+</resources>

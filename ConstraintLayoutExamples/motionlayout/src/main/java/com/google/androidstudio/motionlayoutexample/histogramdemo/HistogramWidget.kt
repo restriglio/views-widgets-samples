@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import androidx.core.content.ContextCompat
 import com.google.androidstudio.motionlayoutexample.R
 import java.util.*
 
+/**
+ * Histogram widget that can animate between programmatically generated data.
+ */
 class HistogramWidget : MotionLayout {
     companion object {
         private const val TAG = "HistogramWidget"
@@ -89,7 +92,7 @@ class HistogramWidget : MotionLayout {
         barTransition = createTransition(scene)
 
         /**
-         * The name is unintuitive due to legacy support.
+         * The order matters here.
          * [MotionScene.addTransition] adds the transition to the scene while
          * [MotionScene.setTransition] sets the transition to be the current transition.
          */
@@ -121,7 +124,7 @@ class HistogramWidget : MotionLayout {
      */
     fun setData(newData: List<HistogramBarMetaData>) {
         val startSet: ConstraintSet = getConstraintSet(barTransition!!.startConstraintSetId)
-        updateConstraintSet(startSet, currentBars)
+        updateConstraintSet(startSet, currentBars, false)
         val endSet: ConstraintSet = getConstraintSet(barTransition!!.endConstraintSetId)
         updateConstraintSet(endSet, newData)
         nextBars = ArrayList(newData)
@@ -129,18 +132,23 @@ class HistogramWidget : MotionLayout {
 
     /**
      * Update the constraint set with the bar metadata.
+     * @param useHeightFromMetaData if true use the meta data height. If false use the current
+     * view heights.
      */
     private fun updateConstraintSet(
             set: ConstraintSet,
-            list: List<HistogramBarMetaData>) {
+            list: List<HistogramBarMetaData>,
+            useHeightFromMetaData: Boolean = true) {
         list.forEach { metadata ->
             val view = bars[metadata.id]!!
-            val height: Float = metadata.height * height
+            val height: Int =
+                    if (useHeightFromMetaData) (metadata.height * height).toInt()
+                    else bars[metadata.id]!!.height
             view.setTextColor(metadata.barTextColour)
             view.text = metadata.name
 
             // These are attributes we wish to animate. We set them through ConstraintSet.
-            set.constrainHeight(view.id, height.toInt())
+            set.constrainHeight(view.id, height)
             set.setColorValue(view.id, "BackgroundColor", metadata.barColour)
         }
     }
